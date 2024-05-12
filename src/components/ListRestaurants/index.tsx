@@ -7,29 +7,22 @@ import { IPagination } from "../../interfaces/IPagination";
 
 const ListRestaurants = () => {
   const [isList, setIsList] = useState<IRestaurant[]>([]);
-  const [isPage, setIsPage] = useState("");
+  const [isNextPage, setIsNextPage] = useState("");
+  const [isPreviousPage, setIsPreviousPage] = useState("");
 
-  useEffect(() => {
+  const loadingData = (url: string) => {
     axios
-      .get<IPagination<IRestaurant>>(
-        "http://localhost:8000/api/v1/restaurantes/"
-      )
+      .get<IPagination<IRestaurant>>(url)
       .then(res => {
         setIsList(res.data.results);
-        setIsPage(res.data.next);
+        setIsNextPage(res.data.next);
+        setIsPreviousPage(res.data.previous);
       })
       .catch(error => console.log({ error: "deu erro na listagem" + error }));
-  }, []);
-
-  const verMais = () => {
-    axios
-      .get<IPagination<IRestaurant>>(isPage)
-      .then(res => {
-        setIsList([...isList, ...res.data.results]);
-        setIsPage(res.data.next);
-      })
-      .catch(error => console.log({ error: "deu erro na paginação" + error }));
   };
+  useEffect(() => {
+    loadingData("http://localhost:8000/api/v1/restaurantes/");
+  }, []);
 
   return (
     <section className={style.ListRestaurants}>
@@ -39,7 +32,19 @@ const ListRestaurants = () => {
       {isList?.map(item => (
         <Restaurant restaurant={item} key={item.id} />
       ))}
-      {isPage && <button onClick={verMais}>ver mais</button>}
+      {
+        <button
+          onClick={() => loadingData(isPreviousPage)}
+          disabled={!isPreviousPage}
+        >
+          Página Anterior
+        </button>
+      }
+      {
+        <button onClick={() => loadingData(isNextPage)} disabled={!isNextPage}>
+          Próxima página
+        </button>
+      }
     </section>
   );
 };
