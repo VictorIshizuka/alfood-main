@@ -11,7 +11,6 @@ interface RestaurantProps {
 
 const Restaurant = ({ restaurant }: RestaurantProps) => {
   const [pratos, setPratos] = useState<IDish[]>();
-  console.log(pratos);
   useEffect(() => {
     axios
       .get<IDish[]>(

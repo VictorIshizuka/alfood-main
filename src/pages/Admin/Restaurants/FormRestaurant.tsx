@@ -1,21 +1,42 @@
 import { Button, TextField } from "@mui/material";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import IRestaurant from "../../../interfaces/IRestaurant";
 
 export const FormRestaurant = () => {
   const [isNameRestaurant, setIsNameRestaurant] = useState("");
+  const params = useParams();
+  const navigate = useNavigate();
 
-  function registerDish(e: React.FormEvent<HTMLFormElement>): void {
-    //criar o hook para criar o prato
+  useEffect(() => {
+    if (params.id) {
+      axios
+        .get<IRestaurant>(
+          `http://localhost:8000/api/v2/restaurantes/${params.id}/`
+        )
+        .then(res => setIsNameRestaurant(res.data.nome));
+    }
+  }, [params]);
+
+  function registerRestaurant(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
-    axios
-      .post("http://localhost:8000/api/v2/restaurantes/", {
+
+    if (params.id) {
+      axios.put(`http://localhost:8000/api/v2/restaurantes/${params.id}/`, {
         nome: isNameRestaurant,
-      })
-      .then(() => {});
+      });
+      navigate(-1);
+    } else {
+      axios.post("http://localhost:8000/api/v2/restaurantes/", {
+        nome: isNameRestaurant,
+      });
+      navigate(-1);
+    }
   }
+
   return (
-    <form onSubmit={registerDish}>
+    <form onSubmit={registerRestaurant}>
       <TextField
         label="Nome do restaurante"
         type="text"
@@ -24,7 +45,7 @@ export const FormRestaurant = () => {
         value={isNameRestaurant}
       />
       <Button variant="outlined" type="submit">
-        Cadastrar
+        {params.id ? "Editar" : "Cadastrar"}
       </Button>
     </form>
   );

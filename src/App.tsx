@@ -11,6 +11,7 @@ function App() {
       <Route path="/restaurantes" element={<RestaurantsShowcase />} />
       <Route path="/admin/restaurantes" element={<AdminRestaurants />} />
       <Route path="/admin/restaurantes/novo" element={<FormRestaurant />} />
+      <Route path="/admin/restaurantes/:id" element={<FormRestaurant />} />
     </Routes>
   );
 }
