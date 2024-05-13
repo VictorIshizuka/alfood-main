@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import IRestaurant from "../../../interfaces/IRestaurant";
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -9,9 +10,10 @@ import {
   TableRow,
 } from "@mui/material";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const AdminRestaurants = () => {
+  const navigate = useNavigate();
   const [isRestaurants, setIsRestaurants] = useState<IRestaurant[]>([]);
 
   useEffect(() => {
@@ -21,25 +23,60 @@ export const AdminRestaurants = () => {
         setIsRestaurants(res.data);
       })
       .catch(error => console.log({ error: "deu erro na listagem" + error }));
-  }, [isRestaurants]);
+  }, []);
+
+  function onDeleteRestaurant(deleteRestaurant: IRestaurant) {
+    axios
+      .delete(
+        `http://localhost:8000/api/v2/restaurantes/${deleteRestaurant.id}/`
+      )
+      .then(() => {
+        const listCurrent = isRestaurants.filter(
+          restaurant => restaurant.id !== deleteRestaurant.id
+        );
+        setIsRestaurants([...listCurrent]);
+      });
+  }
 
   return (
     <>
       <TableContainer>
-        [ <Link to={"novo"}>Novo</Link>]
+        <Button
+          variant="outlined"
+          color="success"
+          onClick={() => navigate("novo")}
+        >
+          Adicionar um novo restaurante
+        </Button>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Nome</TableCell>
               <TableCell>Editar</TableCell>
+              <TableCell>Excluir</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {isRestaurants.map(resturante => (
-              <TableRow key={resturante.id}>
-                <TableCell>{resturante.nome}</TableCell>
+            {isRestaurants.map(restaurante => (
+              <TableRow key={restaurante.id}>
+                <TableCell>{restaurante.nome}</TableCell>
                 <TableCell>
-                  [<Link to={`${resturante.id}/`}>editar</Link>]
+                  <Button
+                    variant="outlined"
+                    color="warning"
+                    onClick={() => navigate(`${restaurante.id}/`)}
+                  >
+                    editar
+                  </Button>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => onDeleteRestaurant(restaurante)}
+                  >
+                    excluir
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
