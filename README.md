@@ -8,6 +8,10 @@ O Alfood é um site que lista restaurantes e pratos do menu.
 - refatorar axios e layout;\
 - estilizar a area de da administração com MUI;\
 - estilizar a area de listagem dos restaurantes publicos; 
+- adicionar a camada de pratos e implementar o metodo de crud;\
+- adicionar implemetação de crud em usuarios;\
+- adicionar usuarios que podem acessar a area de adminstração;\
+- realizar um login basico que verifica a lista de usuarios cadastrados;
 
 <img src="screencapture.png" alt="Imagem do Alfood" width="50%">
 
