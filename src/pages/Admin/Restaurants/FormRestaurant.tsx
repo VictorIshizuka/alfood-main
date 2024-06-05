@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import IRestaurant from "../../../interfaces/IRestaurant";
+import http from "../../../http";
 
 export const FormRestaurant = () => {
   const [isNameRestaurant, setIsNameRestaurant] = useState("");
@@ -11,10 +12,8 @@ export const FormRestaurant = () => {
 
   useEffect(() => {
     if (params.id) {
-      axios
-        .get<IRestaurant>(
-          `http://localhost:8000/api/v2/restaurantes/${params.id}/`
-        )
+      http
+        .get<IRestaurant>(`restaurantes/${params.id}/`)
         .then(res => setIsNameRestaurant(res.data.nome));
     }
   }, [params]);
@@ -23,12 +22,12 @@ export const FormRestaurant = () => {
     e.preventDefault();
 
     if (params.id) {
-      axios.put(`http://localhost:8000/api/v2/restaurantes/${params.id}/`, {
+      http.put(`restaurantes/${params.id}/`, {
         nome: isNameRestaurant,
       });
       navigate(-1);
     } else {
-      axios.post("http://localhost:8000/api/v2/restaurantes/", {
+      http.post("restaurantes/", {
         nome: isNameRestaurant,
       });
       navigate(-1);

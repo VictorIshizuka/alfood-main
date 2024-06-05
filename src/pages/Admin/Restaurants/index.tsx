@@ -11,14 +11,15 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import http from "../../../http";
 
 export const AdminRestaurants = () => {
   const navigate = useNavigate();
   const [isRestaurants, setIsRestaurants] = useState<IRestaurant[]>([]);
 
   useEffect(() => {
-    axios
-      .get<IRestaurant[]>("http://localhost:8000/api/v2/restaurantes/")
+    http
+      .get<IRestaurant[]>("restaurantes/")
       .then(res => {
         setIsRestaurants(res.data);
       })
@@ -26,16 +27,12 @@ export const AdminRestaurants = () => {
   }, []);
 
   function onDeleteRestaurant(deleteRestaurant: IRestaurant) {
-    axios
-      .delete(
-        `http://localhost:8000/api/v2/restaurantes/${deleteRestaurant.id}/`
-      )
-      .then(() => {
-        const listCurrent = isRestaurants.filter(
-          restaurant => restaurant.id !== deleteRestaurant.id
-        );
-        setIsRestaurants([...listCurrent]);
-      });
+    http.delete(`restaurantes/${deleteRestaurant.id}/`).then(() => {
+      const listCurrent = isRestaurants.filter(
+        restaurant => restaurant.id !== deleteRestaurant.id
+      );
+      setIsRestaurants([...listCurrent]);
+    });
   }
 
   return (
