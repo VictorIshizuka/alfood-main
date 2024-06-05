@@ -1,8 +1,13 @@
 export default interface IPrato {
   id: number;
-  name: string;
+  nome: string;
   tag: string;
-  image: string;
-  description: string;
-  restaurant: number;
+  imagem: string;
+  descricao: string;
+  restaurante: number;
+}
+
+export interface ITag {
+  value: string;
+  id: number;
 }
