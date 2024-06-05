@@ -9,28 +9,28 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
 import http from "../../../http";
+import IPrato from "../../../interfaces/IDish";
 
-export const AdminRestaurants = () => {
+export const AdminPratos = () => {
   const navigate = useNavigate();
-  const [isRestaurants, setIsRestaurants] = useState<IRestaurant[]>([]);
+  const [isPratos, setIsPratos] = useState<IPrato[]>([]);
 
   useEffect(() => {
     http
-      .get<IRestaurant[]>("restaurantes/")
+      .get<IPrato[]>("pratos/")
       .then(res => {
-        setIsRestaurants(res.data);
+        setIsPratos(res.data);
       })
       .catch(error => console.log({ error: "deu erro na listagem" + error }));
   }, []);
 
-  function onDeleteRestaurant(deleteRestaurant: IRestaurant) {
-    http.delete(`restaurantes/${deleteRestaurant.id}/`).then(() => {
-      const listCurrent = isRestaurants.filter(
-        restaurant => restaurant.id !== deleteRestaurant.id
-      );
-      setIsRestaurants([...listCurrent]);
+  function onDeletePrato(deletePrato: IPrato) {
+    http.delete(`pratos/${deletePrato.id}/`).then(() => {
+      const listCurrent = isPratos.filter(prato => prato.id !== deletePrato.id);
+      setIsPratos([...listCurrent]);
     });
   }
 
@@ -42,25 +42,29 @@ export const AdminRestaurants = () => {
           color="success"
           onClick={() => navigate("novo")}
         >
-          Adicionar um novo restaurante
+          Adicionar um novo prato
         </Button>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Nome</TableCell>
+              <TableCell>Descrição</TableCell>
+              <TableCell>Tag</TableCell>
               <TableCell>Editar</TableCell>
               <TableCell>Excluir</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {isRestaurants.map(restaurante => (
-              <TableRow key={restaurante.id}>
-                <TableCell>{restaurante.nome}</TableCell>
+            {isPratos.map(prato => (
+              <TableRow key={prato.id}>
+                <TableCell>{prato.nome}</TableCell>
+                <TableCell>{prato.descricao}</TableCell>
+                <TableCell>{prato.tag}</TableCell>
                 <TableCell>
                   <Button
                     variant="outlined"
                     color="warning"
-                    onClick={() => navigate(`${restaurante.id}/`)}
+                    onClick={() => navigate(`${prato.id}/`)}
                   >
                     editar
                   </Button>
@@ -69,7 +73,7 @@ export const AdminRestaurants = () => {
                   <Button
                     variant="outlined"
                     color="error"
-                    onClick={() => onDeleteRestaurant(restaurante)}
+                    onClick={() => onDeletePrato(prato)}
                   >
                     excluir
                   </Button>
