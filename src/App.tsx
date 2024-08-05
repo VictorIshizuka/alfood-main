@@ -11,7 +11,9 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+
       <Route path="/restaurantes" element={<RestaurantsShowcase />} />
+
       <Route path="/admin" element={<AppBarLayout />}>
         <Route path="/admin/restaurantes" element={<AdminRestaurants />} />
         <Route path="/admin/restaurantes/novo" element={<FormRestaurant />} />
