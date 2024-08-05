@@ -12,8 +12,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import http from "../../../http";
-import { ITag } from "../../../interfaces/IDish";
+
 import IRestaurant from "../../../interfaces/IRestaurant";
+import { ITag } from "../../../interfaces/ITag";
 
 export const FormPratos = () => {
   const [isNamePratos, setIsNamePratos] = useState("");
